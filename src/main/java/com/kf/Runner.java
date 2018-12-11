@@ -35,7 +35,7 @@ public class Runner {
         }
         logger.info("start update blog content.");
         try {
-            ProcessBuilder pb = new ProcessBuilder("/bin/bash", "cd", "/root/blog", "git pull");
+            ProcessBuilder pb = new ProcessBuilder("/bin/bash", "-c","/root/blog1/update.sh");
             Process process = pb.start();
             process.waitFor();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
