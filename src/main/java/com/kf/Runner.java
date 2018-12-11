@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -33,7 +35,15 @@ public class Runner {
         logger.info("start update blog content.");
         try {
             ProcessBuilder pb = new ProcessBuilder("/bin/bash", "cd", "/root/blog", "git pull");
-            pb.start();
+            Process process = pb.start();
+            process.waitFor();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            StringBuilder sb = new StringBuilder();
+            String s;
+            while ((s = reader.readLine()) != null) {
+                sb.append(s).append('\n');
+            }
+            logger.info(sb.toString());
         } catch (Exception e) {
             logger.error("", e);
         }
