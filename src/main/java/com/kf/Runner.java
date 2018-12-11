@@ -29,6 +29,7 @@ public class Runner {
     @ResponseBody
     public String update() {
         AtomicInteger atomicInteger = counter.computeIfAbsent(LocalDate.now(), k -> new AtomicInteger());
+        logger.info(String.valueOf(atomicInteger.get()));
         if (atomicInteger.incrementAndGet() > 20) {
             return "???";
         }
