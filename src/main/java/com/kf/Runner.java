@@ -3,12 +3,14 @@ package com.kf;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.time.LocalDate;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by keefe
@@ -19,21 +21,19 @@ import java.io.InputStreamReader;
 public class Runner {
 
     private final Logger logger = LoggerFactory.getLogger(Runner.class);
+    private final ConcurrentMap<LocalDate, AtomicInteger> counter = new ConcurrentHashMap<>();
 
-    @GetMapping("update")
+    @PostMapping("update")
     @ResponseBody
     public String update() {
+        AtomicInteger atomicInteger = counter.computeIfAbsent(LocalDate.now(), k -> new AtomicInteger());
+        if (atomicInteger.incrementAndGet() > 20) {
+            return "???";
+        }
         logger.info("start update blog content.");
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(Runner.class.getClassLoader().getResourceAsStream("update.sh")))) {
-//            StringBuilder cmd = new StringBuilder();
-//            String s;
-//            while ((s = reader.readLine()) != null) {
-//                cmd.append(s).append(';');
-//            }
-//            Runtime.getRuntime().exec(cmd.toString());
-            ProcessBuilder pb = new ProcessBuilder("bin/bash", "cd", "/root/blog", "git pull");
+        try {
+            ProcessBuilder pb = new ProcessBuilder("/bin/bash", "cd", "/root/blog", "git pull");
             pb.start();
-//            Runtime.getRuntime().exec("#!/bin/bash;cd /root/blog;git pull");
         } catch (Exception e) {
             logger.error("", e);
         }
