@@ -31,7 +31,9 @@ public class Runner {
 //                cmd.append(s).append(';');
 //            }
 //            Runtime.getRuntime().exec(cmd.toString());
-            Runtime.getRuntime().exec("#!/bin/bash;cd /root/blog;git pull");
+            ProcessBuilder pb = new ProcessBuilder("#!/bin/bash;cd /root/blog;git pull");
+            Process proc = pb.start();
+//            Runtime.getRuntime().exec("#!/bin/bash;cd /root/blog;git pull");
         } catch (Exception e) {
             logger.error("", e);
         }
