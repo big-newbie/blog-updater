@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStreamReader;
 
 /**
@@ -32,9 +31,7 @@ public class Runner {
 //                cmd.append(s).append(';');
 //            }
 //            Runtime.getRuntime().exec(cmd.toString());
-            ProcessBuilder pb = new ProcessBuilder("#!/bin/bash", "cd", "/root/blog", "git pull");
-            pb.directory(new File("/root/blog"));
-            pb.environment();
+            ProcessBuilder pb = new ProcessBuilder("bin/bash", "cd", "/root/blog", "git pull");
             pb.start();
 //            Runtime.getRuntime().exec("#!/bin/bash;cd /root/blog;git pull");
         } catch (Exception e) {
